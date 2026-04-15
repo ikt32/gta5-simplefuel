@@ -18,3 +18,5 @@ void showTextboxTop(std::string, bool);
 
 //Dbg
 void showText(float x, float y, float scale, const std::string &text, int font, bool outline);
+
+namespace UI = HUD;

@@ -1,6 +1,7 @@
 #include "FuelStation.hpp"
 #include "Util/INIutils.hpp"
 #include <inc/natives.h>
+#include <stdexcept>
 
 std::string FuelStation::path = "";
 
@@ -159,22 +160,22 @@ void FuelStation::setBlipVisible(bool visible)
 void FuelStation::setNearest(bool active, bool route)
 {
 	if (active) setBlipVisible(true);
-	UI::SET_BLIP_FLASHES(blip, active);
-	UI::SET_BLIP_ROUTE(blip, route);
-	UI::SET_BLIP_ROUTE_COLOUR(blip, 4); //White
+	HUD::SET_BLIP_FLASHES(blip, active);
+	HUD::SET_BLIP_ROUTE(blip, route);
+	HUD::SET_BLIP_ROUTE_COLOUR(blip, 4); //White
 }
 
 void FuelStation::setupBlip()
 {
 	if (!visible)
 	{
-		blip = UI::ADD_BLIP_FOR_COORD((float)X, (float)Y, (float)Z);
-		UI::SET_BLIP_SPRITE(blip, 361); //Jerry Can
-		UI::SET_BLIP_AS_SHORT_RANGE(blip, true);
+		blip = HUD::ADD_BLIP_FOR_COORD((float)X, (float)Y, (float)Z);
+		HUD::SET_BLIP_SPRITE(blip, 361); //Jerry Can
+		HUD::SET_BLIP_AS_SHORT_RANGE(blip, true);
 
-		UI::BEGIN_TEXT_COMMAND_SET_BLIP_NAME("STRING");
-		UI::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(blipName);
-		UI::END_TEXT_COMMAND_SET_BLIP_NAME(blip);
+		HUD::BEGIN_TEXT_COMMAND_SET_BLIP_NAME("STRING");
+		HUD::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(blipName);
+		HUD::END_TEXT_COMMAND_SET_BLIP_NAME(blip);
 
 		visible = true;
 	}
@@ -184,7 +185,7 @@ void FuelStation::removeBlip()
 {
 	if (visible)
 	{
-		UI::REMOVE_BLIP(&blip);
+		HUD::REMOVE_BLIP(&blip);
 		blip = 0;
 		visible = false;
 	}

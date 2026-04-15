@@ -67,7 +67,7 @@ float getConsumption()
 
 void drawFuelRect(float posX, float posY, float width, float height, int r, int g, int b, int a)
 {
-	GRAPHICS::DRAW_RECT(posX + 0.5f*width*ratioComp, posY, width*ratioComp, height, r, g, b, a);
+	GRAPHICS::DRAW_RECT(posX + 0.5f*width*ratioComp, posY, width*ratioComp, height, r, g, b, a, 0);
 }
 void drawFuelRect(float posX, float posY, float width, float height, Color color, int a)
 {
@@ -514,7 +514,7 @@ void update()
 		else
 		{
 			bool isRoadVehicle;
-			bool isElectric;
+			//bool isElectric;
 			int vClass = VEHICLE::GET_VEHICLE_CLASS(playerVeh);
 			switch (vClass)
 			{

@@ -1,8 +1,9 @@
 #pragma once
 #include <cstdint>
+#include "../Util/Versions.h"
 
 namespace mem {
-	void init();
+	void init(int version);
 	extern uint64_t(*GetAddressOfEntity)(int entity);
 	uintptr_t FindPattern(const char* pattern, const char* mask);
 }
