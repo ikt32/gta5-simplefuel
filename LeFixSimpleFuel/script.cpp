@@ -374,7 +374,7 @@ void refuelWithJerryCan()
 				float addLiter = 0.125f * Settings::literPerSecond * 0.3f;       // 1/8 second, 0.5f: slower than refueling at gas station
 				ammo -= (int)(4500.0f * addLiter / Settings::capOfJerryCan);     //max 4500 Units gasoline in jerry can
 				if (ammo < 0) ammo = 0;
-				WEAPON::SET_PED_AMMO(playerPed, Settings::weaponHashJerry, ammo); //Method parameter defined as hash, can't use eWeapon.WeaponPetrolCan ?
+				WEAPON::SET_PED_AMMO(playerPed, Settings::weaponHashJerry, ammo, 0); //Method parameter defined as hash, can't use eWeapon.WeaponPetrolCan ?
 				closeLiter += addLiter;
 			}
 			else
