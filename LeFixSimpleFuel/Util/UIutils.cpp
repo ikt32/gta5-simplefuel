@@ -8,14 +8,14 @@ void showNotification(std::string message) {
 }
 
 void showNotification(int &handle, std::string message) {
-	UI::_SET_NOTIFICATION_TEXT_ENTRY("STRING");
+	HUD::BEGIN_TEXT_COMMAND_THEFEED_POST("STRING");
 	UI::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME(&message[0u]);
-	handle = UI::_DRAW_NOTIFICATION(false, false);
+	handle = HUD::END_TEXT_COMMAND_THEFEED_POST_TICKER(false, false);
 }
 
 void removeNotification(int &handle)
 {
-	if (handle != 0) UI::_REMOVE_NOTIFICATION(handle);
+	if (handle != 0) HUD::THEFEED_REMOVE_ITEM(handle);
 }
 
 void replaceNotification(int &handle, std::string message)
@@ -49,5 +49,5 @@ void showText(float x, float y, float scale, const std::string &text, int font, 
     if (outline) UI::SET_TEXT_OUTLINE();
     UI::BEGIN_TEXT_COMMAND_DISPLAY_TEXT("STRING");
     UI::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME((char*)text.c_str());
-    UI::END_TEXT_COMMAND_DISPLAY_TEXT(x, y);
+    UI::END_TEXT_COMMAND_DISPLAY_TEXT(x, y, 0);
 }

@@ -2,10 +2,11 @@
 #include "NativeMemory.hpp"
 #include "Offsets.hpp"
 #include "../Util/Logger.hpp"
+#include "../Util/Versions.h"
 #include <vector>
 
 VehicleExtensions::VehicleExtensions() {
-    mem::init();
+    mem::init(getGameVersion());
 }
 
 BYTE *VehicleExtensions::GetAddress(Vehicle handle) {

@@ -67,7 +67,7 @@ float getConsumption()
 
 void drawFuelRect(float posX, float posY, float width, float height, int r, int g, int b, int a)
 {
-	GRAPHICS::DRAW_RECT(posX + 0.5f*width*ratioComp, posY, width*ratioComp, height, r, g, b, a);
+	GRAPHICS::DRAW_RECT(posX + 0.5f*width*ratioComp, posY, width*ratioComp, height, r, g, b, a, 0);
 }
 void drawFuelRect(float posX, float posY, float width, float height, Color color, int a)
 {
@@ -374,7 +374,7 @@ void refuelWithJerryCan()
 				float addLiter = 0.125f * Settings::literPerSecond * 0.3f;       // 1/8 second, 0.5f: slower than refueling at gas station
 				ammo -= (int)(4500.0f * addLiter / Settings::capOfJerryCan);     //max 4500 Units gasoline in jerry can
 				if (ammo < 0) ammo = 0;
-				WEAPON::SET_PED_AMMO(playerPed, Settings::weaponHashJerry, ammo); //Method parameter defined as hash, can't use eWeapon.WeaponPetrolCan ?
+				WEAPON::SET_PED_AMMO(playerPed, Settings::weaponHashJerry, ammo, 0); //Method parameter defined as hash, can't use eWeapon.WeaponPetrolCan ?
 				closeLiter += addLiter;
 			}
 			else
@@ -514,7 +514,7 @@ void update()
 		else
 		{
 			bool isRoadVehicle;
-			bool isElectric;
+			//bool isElectric;
 			int vClass = VEHICLE::GET_VEHICLE_CLASS(playerVeh);
 			switch (vClass)
 			{
