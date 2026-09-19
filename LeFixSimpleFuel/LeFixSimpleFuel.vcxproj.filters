@@ -15,19 +15,19 @@
     <ClCompile Include="Util\INIutils.cpp">
       <Filter>Util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menu.cpp">
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menu.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menucontrols.cpp">
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menucontrols.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menukeyboard.cpp">
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menukeyboard.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menusettings.cpp">
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menusettings.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menuutils.cpp">
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menuutils.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
     <ClCompile Include="Util\UIutils.cpp">
@@ -36,7 +36,7 @@
     <ClCompile Include="Util\Logger.cpp">
       <Filter>Util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menumemutils.cpp">
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menumemutils.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
   </ItemGroup>
@@ -64,22 +64,22 @@
     <ClInclude Include="Util\INIutils.hpp">
       <Filter>Util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menu.h">
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menu.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menucontrols.h">
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menucontrols.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menukeyboard.h">
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menukeyboard.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menusettings.h">
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menusettings.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menuutils.h">
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menuutils.h">
       <Filter>Menu</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\thirdparty\simpleini\SimpleIni.h">
+    <ClInclude Include="..\thirdparty\simpleini\SimpleIni.h">
       <Filter>simpleini</Filter>
     </ClInclude>
     <ClInclude Include="Util\Logger.hpp">
@@ -88,7 +88,7 @@
     <ClInclude Include="Memory\VehicleFlags.h">
       <Filter>Memory</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menumemutils.hpp">
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menumemutils.hpp">
       <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>

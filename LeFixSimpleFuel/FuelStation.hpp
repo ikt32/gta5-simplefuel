@@ -7,7 +7,7 @@ class FuelStation
 {
 public:
 
-	static char* blipName;
+	static const char* blipName;
 	static std::string path;
 
 	bool exists;

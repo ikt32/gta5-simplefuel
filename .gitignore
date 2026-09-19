@@ -11,3 +11,4 @@
 *.obj
 *.pdb
 *.sdf
+.vscode/settings.json

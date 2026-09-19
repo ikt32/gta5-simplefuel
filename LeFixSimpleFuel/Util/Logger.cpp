@@ -28,7 +28,7 @@ void Logger::Write(const std::string& text) const {
         text << "\n";
 }
 
-int Logger::Writef(char *fmt, ...) {
+int Logger::Writef(const char *fmt, ...) {
     const int size = 1024;
     char buff[size];
     int result;

@@ -67,7 +67,9 @@ float getConsumption()
 
 void drawFuelRect(float posX, float posY, float width, float height, int r, int g, int b, int a)
 {
-	GRAPHICS::DRAW_RECT(posX + 0.5f*width*ratioComp, posY, width*ratioComp, height, r, g, b, a);
+	GRAPHICS::DRAW_RECT(
+		Vector2{ posX + 0.5f * width * ratioComp, posY },
+		width * ratioComp, height, r, g, b, a, false);
 }
 void drawFuelRect(float posX, float posY, float width, float height, Color color, int a)
 {
@@ -113,7 +115,7 @@ int getCash(int character)
 {
 	char statNameFull[32];
 	sprintf_s(statNameFull, "SP%d_TOTAL_CASH", lastMainCharacter);
-	Hash hash = GAMEPLAY::GET_HASH_KEY(statNameFull);
+	Hash hash = MISC::GET_HASH_KEY(statNameFull);
 	int val;
 	STATS::STAT_GET_INT(hash, &val, -1);
 	return val;
@@ -123,7 +125,7 @@ void addCash(int amount)
 {
 	char statNameFull[32];
 	sprintf_s(statNameFull, "SP%d_TOTAL_CASH", lastMainCharacter);
-	Hash hash = GAMEPLAY::GET_HASH_KEY(statNameFull);
+	Hash hash = MISC::GET_HASH_KEY(statNameFull);
 	int val;
 	STATS::STAT_GET_INT(hash, &val, -1);
 	val += amount;
@@ -145,7 +147,7 @@ void refuel()
 	else if (Settings::isRefuelRealistic)
 	{
 		replaceNotification(handleNoteRefuel, &noteRefuel[0u]);
-		liter = GAMEPLAY::GET_FRAME_TIME() * Settings::literPerSecond;
+		liter = MISC::GET_FRAME_TIME() * Settings::literPerSecond;
 	}
 	
 	
@@ -181,14 +183,14 @@ void tryToRefuel()
 	{
 	case RefuelInputHold:
 		//Show Input help if player doesn't press refuel input even though tank is not full
-		showInputHelp = fuelBarLevel < 0.99f && !CONTROLS::IS_CONTROL_PRESSED(2, Settings::refuelControlStation);
+		showInputHelp = fuelBarLevel < 0.99f && !PAD::IS_CONTROL_PRESSED(2, Settings::refuelControlStation);
 		//Refuel or remove refueling notification
-		CONTROLS::IS_CONTROL_PRESSED(2, Settings::refuelControlStation) ? refuel() : removeNotification(handleNoteRefuel);
+		PAD::IS_CONTROL_PRESSED(2, Settings::refuelControlStation) ? refuel() : removeNotification(handleNoteRefuel);
 		break;
 
 	case RefuelInputOnce:
 		//Check if input is pressed
-		if (CONTROLS::IS_CONTROL_PRESSED(2, Settings::refuelControlStation)) didRefuelInput = true;
+		if (PAD::IS_CONTROL_PRESSED(2, Settings::refuelControlStation)) didRefuelInput = true;
 		//Show Input help if player didn't press refuel input yet even though tank is not full
 		showInputHelp = !didRefuelInput && fuelBarLevel < 0.99f;
 		//Refuel if player wants to
@@ -297,7 +299,8 @@ bool canRefuelClosestVehWithJerryCan()
 	//Determine closest vehicle
 	Vector3 vectP = ENTITY::GET_ENTITY_COORDS(playerPed, false);
 	float pX = vectP.x, pY = vectP.y, pZ = vectP.z;
-	Vehicle closeVeh = VEHICLE::GET_CLOSEST_VEHICLE(pX, pY, pZ, Settings::maxJerryDist, 0, 70);
+	Vehicle closeVeh = VEHICLE::GET_CLOSEST_VEHICLE(
+		Vector3{ pX, pY, pZ }, Settings::maxJerryDist, 0, 70);
 
 	//No Vehcile found
 	if (closeVeh == 0) return false;
@@ -321,7 +324,9 @@ bool canRefuelClosestVehWithJerryCan()
 	float cX = vX - pX;
 	float cY = vY - pY;
 
-	float cosPhi = (cX*fX + cY*fY) / (SYSTEM::VDIST(cX, cY, 0, 0, 0, 0) * SYSTEM::VDIST(fX, fY, 0, 0, 0, 0));
+	float cosPhi = (cX*fX + cY*fY) /
+		(SYSTEM::VDIST(Vector3{ cX, cY, 0.0f }, Vector3{}) *
+		 SYSTEM::VDIST(Vector3{ fX, fY, 0.0f }, Vector3{}));
 	
 	//Facing vehicle
 	if (cosPhi < 0.6f) return false;
@@ -334,7 +339,8 @@ void refuelWithJerryCan()
 	//Get closest vehicle and its fuel value
 	Vector3 vectP = ENTITY::GET_ENTITY_COORDS(playerPed, false);
 	float pX = vectP.x, pY = vectP.y, pZ = vectP.z;
-	Vehicle closeVeh = VEHICLE::GET_CLOSEST_VEHICLE(pX, pY, pZ, Settings::maxJerryDist*1.5f, 0, 70);
+	Vehicle closeVeh = VEHICLE::GET_CLOSEST_VEHICLE(
+		Vector3{ pX, pY, pZ }, Settings::maxJerryDist * 1.5f, 0, 70);
 	if (closeVeh == 0) return;
 	float closeLiter = ext.GetFuelLevel(closeVeh);
 	float closeCap = ext.GetPetrolTankVolume(closeVeh);
@@ -354,7 +360,7 @@ void refuelWithJerryCan()
 	DWORD next;
 
 	//Intro
-	AI::TASK_PLAY_ANIM(playerPed, "weapon@w_sp_jerrycan", "fire_intro", 8.0, 0.0, -1, 16, 0.0f, false, false, false);
+	TASK::TASK_PLAY_ANIM(playerPed, "weapon@w_sp_jerrycan", "fire_intro", 8.0, 0.0, -1, 16, 0.0f, false, false, false);
 	next = GetTickCount() + 833;
 	while (GetTickCount() < next) WAIT(0);
 
@@ -363,18 +369,18 @@ void refuelWithJerryCan()
 	//Refueling
 	replaceNotification(handleNoteRefuel, &noteRefuel[0u]);
 
-	while (CONTROLS::IS_CONTROL_PRESSED(2, Settings::refuelControlJerry) && closeLiter < closeCap && ammo > 0)
+	while (PAD::IS_CONTROL_PRESSED(2, Settings::refuelControlJerry) && closeLiter < closeCap && ammo > 0)
 	{
-		AI::TASK_PLAY_ANIM(playerPed, "weapon@w_sp_jerrycan", "fire", 8.0, 0.0, -1, 16, 0.0f, false, false, false);
+		TASK::TASK_PLAY_ANIM(playerPed, "weapon@w_sp_jerrycan", "fire", 8.0, 0.0, -1, 16, 0.0f, false, false, false);
 
 		for (int x = 0; x < 8; x++) //Simulate continous fuel flow during animation
 		{
-			if (ammo > 0 && CONTROLS::IS_CONTROL_PRESSED(2, Settings::refuelControlJerry))
+			if (ammo > 0 && PAD::IS_CONTROL_PRESSED(2, Settings::refuelControlJerry))
 			{
 				float addLiter = 0.125f * Settings::literPerSecond * 0.3f;       // 1/8 second, 0.5f: slower than refueling at gas station
 				ammo -= (int)(4500.0f * addLiter / Settings::capOfJerryCan);     //max 4500 Units gasoline in jerry can
 				if (ammo < 0) ammo = 0;
-				WEAPON::SET_PED_AMMO(playerPed, Settings::weaponHashJerry, ammo); //Method parameter defined as hash, can't use eWeapon.WeaponPetrolCan ?
+				WEAPON::SET_PED_AMMO(playerPed, Settings::weaponHashJerry, ammo, false);
 				closeLiter += addLiter;
 			}
 			else
@@ -382,7 +388,7 @@ void refuelWithJerryCan()
 				x = 8;
 			}
 			next = GetTickCount() + 120;
-			while (GetTickCount() < next) { UI::SHOW_HUD_COMPONENT_THIS_FRAME(2); WAIT(0); }
+			while (GetTickCount() < next) { HUD::SHOW_HUD_COMPONENT_THIS_FRAME(2); WAIT(0); }
 		}
 	}
 
@@ -394,7 +400,7 @@ void refuelWithJerryCan()
 	}
 
 	//Outro
-	AI::TASK_PLAY_ANIM(playerPed, "weapon@w_sp_jerrycan", "fire_outro", 8.0, 0.0, -1, 16, 0.0f, false, false, false);
+	TASK::TASK_PLAY_ANIM(playerPed, "weapon@w_sp_jerrycan", "fire_outro", 8.0, 0.0, -1, 16, 0.0f, false, false, false);
 	next = GetTickCount() + 1033;
 	while (GetTickCount() < next) WAIT(0);
 	ext.SetFuelLevel(closeVeh, closeLiter);
@@ -514,7 +520,6 @@ void update()
 		else
 		{
 			bool isRoadVehicle;
-			bool isElectric;
 			int vClass = VEHICLE::GET_VEHICLE_CLASS(playerVeh);
 			switch (vClass)
 			{
@@ -568,7 +573,7 @@ void update()
 		if (fuelBarLevel > 0.0f && VEHICLE::GET_IS_VEHICLE_ENGINE_RUNNING(playerVeh))
 		{
 			//Calculate New Fuel
-			fuelBarLevel -= GAMEPLAY::GET_FRAME_TIME() * getConsumption() / (60.0f * Settings::fuelTime);
+			fuelBarLevel -= MISC::GET_FRAME_TIME() * getConsumption() / (60.0f * Settings::fuelTime);
 
 			//Fuel gone
 			if (fuelBarLevel < 0.01f)
@@ -603,7 +608,7 @@ void update()
 	else
 	{
 		//Check for refueling manually
-		if (showJerryHelp && CONTROLS::IS_CONTROL_PRESSED(2, Settings::refuelControlJerry))
+		if (showJerryHelp && PAD::IS_CONTROL_PRESSED(2, Settings::refuelControlJerry))
 		{
 			refuelWithJerryCan();
 		}
@@ -618,7 +623,7 @@ void updateRare()
 	if (tankCapacity <= 0.0f)
 	{
 		belowCrit = false;
-		//Nächstgelegene Station deaktivieren
+		//NÃ¤chstgelegene Station deaktivieren
 		if (nearestRefuel != -1)
 		{
 			station[nearestRefuel].setNearest(false, false);
@@ -636,7 +641,7 @@ void updateRare()
 			{
 				//Grenzwert nicht laenger unterschritten
 				belowCrit = false;
-				//Nächstgelegene Station deaktivieren
+				//NÃ¤chstgelegene Station deaktivieren
 				if (nearestRefuel != -1)
 				{
 					station[nearestRefuel].setNearest(false, false);
@@ -671,7 +676,7 @@ void updateRare()
 					int currentNearest = getNearStationPath(5000);
 					if (nearestRefuel != currentNearest)
 					{
-						//naechstgelegene Station hat sich geändert
+						//naechstgelegene Station hat sich geÃ¤ndert
 						if (nearestRefuel != -1)
 						{
 							station[nearestRefuel].setNearest(false, false); //alt
@@ -708,7 +713,7 @@ void updateRare()
 		//Grenzwert immer noch nicht unterschritten
 		else
 		{
-			//Nächstgelegene Station deaktivieren
+			//NÃ¤chstgelegene Station deaktivieren
 			if (nearestRefuel != -1)
 			{
 				station[nearestRefuel].setNearest(false, false);
@@ -730,7 +735,7 @@ void updateRare()
 	}
 
 	//Check screen ratio
-	ratioComp = 16.0f/9.0f/GRAPHICS::_GET_ASPECT_RATIO(FALSE);
+	ratioComp = 16.0f / 9.0f / GRAPHICS::GET_ASPECT_RATIO(FALSE);
 
 	//Stop electric cars
 	//if (isVehicleValid(playerVeh, false, true) && fuelBarLevel == 0.0f) VEHICLE::SET_VEHICLE_UNDRIVEABLE(playerVeh, true);
